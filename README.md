@@ -8,7 +8,7 @@ Library used to make good looking curved SeekBars.
 
 Library can be used to make good-looking curved SeekBar:
  
-![Gif example](art/amim.gif)
+![Gif example](art/anim.gif)
 
 Here are some usage examples:
 
