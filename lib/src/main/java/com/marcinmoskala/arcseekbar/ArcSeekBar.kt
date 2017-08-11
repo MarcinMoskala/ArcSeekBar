@@ -18,9 +18,9 @@ class ArcSeekBar @JvmOverloads constructor(
         defStyle: Int = -1
 ) : View(context, attrs, defStyle) {
 
-    var onProgressChangedListener: ((progress: Int) -> Unit)? = null
-    var onStartTrackingTouch: ((progress: Int) -> Unit)? = null
-    var onStopTrackingTouch: ((progress: Int) -> Unit)? = null
+    var onProgressChangedListener: (ProgressListener)? = null
+    var onStartTrackingTouch: (ProgressListener)? = null
+    var onStopTrackingTouch: (ProgressListener)? = null
 
     private val a = attrs?.let { context.obtainStyledAttributes(attrs, R.styleable.ArcSeekBar, defStyle, 0) }
 
@@ -40,7 +40,7 @@ class ArcSeekBar @JvmOverloads constructor(
             progressPaint.strokeWidth = value
         }
 
-    var arcWidth: Float = a.useOrDefault(2F) { getDimension(R.styleable.ArcSeekBar_arcWidth, it) }
+    var progressBackgroundWidth: Float = a.useOrDefault(2F) { getDimension(R.styleable.ArcSeekBar_progressBackgroundWidth, it) }
         set(mArcWidth) {
             field = mArcWidth
             arcPaint.strokeWidth = mArcWidth
@@ -60,9 +60,9 @@ class ArcSeekBar @JvmOverloads constructor(
             invalidate()
         }
 
-    private val thumb: Drawable = a?.getDrawable(R.styleable.ArcSeekBar_thumb) ?: resources.getDrawable(R.drawable.thumb)
+    private val thumb: Drawable = a?.getDrawable(R.styleable.ArcSeekBar_progressDrawable) ?: resources.getDrawable(R.drawable.thumb)
 
-    private var roundedEdges = a.useOrDefault(false) { getBoolean(R.styleable.ArcSeekBar_roundEdges, it) }
+    private var roundedEdges = a.useOrDefault(true) { getBoolean(R.styleable.ArcSeekBar_roundEdges, it) }
         set(value) {
             if (value) {
                 arcPaint.strokeCap = Paint.Cap.ROUND
@@ -77,10 +77,10 @@ class ArcSeekBar @JvmOverloads constructor(
     private var mEnabled = a?.getBoolean(R.styleable.ArcSeekBar_enabled, true) ?: true
 
     private var arcPaint: Paint = Paint().apply {
-        color = a.useOrDefault(resources.getColor(android.R.color.darker_gray)) { getColor(R.styleable.ArcSeekBar_arcColor, it) }
+        color = a.useOrDefault(resources.getColor(android.R.color.darker_gray)) { getColor(R.styleable.ArcSeekBar_progressBackgroundColor, it) }
         isAntiAlias = true
         style = Paint.Style.STROKE
-        strokeWidth = arcWidth
+        strokeWidth = progressBackgroundWidth
         if (roundedEdges) strokeCap = Paint.Cap.ROUND
     }
 
@@ -143,7 +143,9 @@ class ArcSeekBar @JvmOverloads constructor(
         val width = View.getDefaultSize(suggestedMinimumWidth, widthMeasureSpec)
         val dx = maxOf(thumb.intrinsicWidth.toFloat() / 2, this.progressWidth) + 2
         val dy = maxOf(thumb.intrinsicHeight.toFloat() / 2, this.progressWidth) + 2
-        drawData = ArcSeekBarData(dx + paddingLeft, dy + paddingTop, width.toFloat() - 2 * dx - paddingLeft - paddingRight, height.toFloat() - 2 * dy - paddingTop - paddingBottom, progress, maxProgress)
+        val realWidth = width.toFloat() - 2 * dx - paddingLeft - paddingRight
+        val realHeight = minOf(height.toFloat() - 2 * dy - paddingTop - paddingBottom, realWidth / 2)
+        drawData = ArcSeekBarData(dx + paddingLeft, dy + paddingTop, realWidth, realHeight, progress, maxProgress)
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
     }
 
