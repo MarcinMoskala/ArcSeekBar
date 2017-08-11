@@ -1,5 +1,6 @@
 package com.marcinmoskala.arcseekbar
 
+import android.graphics.Color
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -11,10 +12,11 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        seekArc.onProgressChangedListener = { _, p ->
-            toast("Value is $p")
+        seekArc.onProgressChangedListener = { p ->
             Log.i("SeekBar", "Value is $p")
         }
+        val colors = resources.getIntArray(R.array.sliderArc)
+        seekArc.setProgressGradient(*colors)
     }
 
     fun toast(text: String) {

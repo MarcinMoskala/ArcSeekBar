@@ -1,15 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.marcinmoskala.arcseekbar.MainActivity">
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <com.marcinmoskala.arcseekbar.ArcSeekBar xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/seekArc"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_margin="20dp"
+        android:padding="20dp"
+        app:arcColor="@color/sliderBack"
+        app:arcWidth="20dp"
+        app:progress="100"
+        app:progressWidth="20dp"
+        app:roundEdges="true"
+        app:thumb="@drawable/thumb" />
+
+    <!--<com.marcinmoskala.arcseekbar.ArcSeekBar-->
+    <!--android:padding="20dp"-->
+    <!--android:layout_margin="20dp"-->
+    <!--android:layout_width="200dp"-->
+    <!--android:layout_height="100dp" />-->
 
     <com.marcinmoskala.arcseekbar.ArcSeekBar
-        android:id="@+id/seekArc"
-        android:layout_width="200dp"
-        android:layout_height="100dp"
-        android:layout_gravity="center" />
+        android:layout_width="300dp"
+        android:layout_height="150dp"
+        android:layout_margin="20dp"
+        android:padding="20dp" />
 
 </LinearLayout>

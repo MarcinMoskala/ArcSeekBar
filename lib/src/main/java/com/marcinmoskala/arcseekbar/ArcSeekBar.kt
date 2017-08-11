@@ -3,7 +3,9 @@ package com.marcinmoskala.arcseekbar
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Canvas
+import android.graphics.LinearGradient
 import android.graphics.Paint
+import android.graphics.Shader
 import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.view.MotionEvent
@@ -22,11 +24,9 @@ class ArcSeekBar @JvmOverloads constructor(
 
     private val a = attrs?.let { context.obtainStyledAttributes(attrs, R.styleable.ArcSeekBar, defStyle, 0) }
 
-    private var mThumb: Drawable = a?.getDrawable(R.styleable.ArcSeekBar_thumb) ?: resources.getDrawable(R.drawable.thumb)
+    var maxProgress = a.useOrDefault(100) { getInteger(R.styleable.ArcSeekBar_maxProgress, it) }
 
-    var maxProgress = a?.getInteger(R.styleable.ArcSeekBar_maxProgress, 100) ?: 100
-
-    var progress: Int = a?.getInteger(R.styleable.ArcSeekBar_progress, 0) ?: 0
+    var progress: Int = a.useOrDefault(0) { getInteger(R.styleable.ArcSeekBar_progress, it) }
         set(progress) {
             field = bound(0, progress, maxProgress)
             onProgressChangedListener?.invoke(field)
@@ -34,58 +34,105 @@ class ArcSeekBar @JvmOverloads constructor(
             invalidate()
         }
 
-    private val defaultProgressWidth = (4 * context.resources.displayMetrics.density).toInt()
-    private var mProgressWidth = a?.getDimension(R.styleable.ArcSeekBar_progressWidth, defaultProgressWidth.toFloat())?.toInt() ?: defaultProgressWidth
+    var progressWidth: Float = a.useOrDefault(4 * context.resources.displayMetrics.density) { getDimension(R.styleable.ArcSeekBar_progressWidth, it) }
+        set(value) {
+            field = value
+            progressPaint.strokeWidth = value
+        }
 
-    private var mArcWidth = a?.getDimension(R.styleable.ArcSeekBar_arcWidth, 2F)?.toInt() ?: 2
+    var arcWidth: Float = a.useOrDefault(2F) { getDimension(R.styleable.ArcSeekBar_arcWidth, it) }
+        set(mArcWidth) {
+            field = mArcWidth
+            arcPaint.strokeWidth = mArcWidth
+        }
 
-    private var roundedEdges = a?.getBoolean(R.styleable.ArcSeekBar_roundEdges, false) ?: false
+    var progressColor: Int
+        get() = progressPaint.color
+        set(color) {
+            progressPaint.color = color
+            invalidate()
+        }
+
+    var arcColor: Int
+        get() = arcPaint.color
+        set(color) {
+            arcPaint.color = color
+            invalidate()
+        }
+
+    private val thumb: Drawable = a?.getDrawable(R.styleable.ArcSeekBar_thumb) ?: resources.getDrawable(R.drawable.thumb)
+
+    private var roundedEdges = a.useOrDefault(false) { getBoolean(R.styleable.ArcSeekBar_roundEdges, it) }
         set(value) {
             if (value) {
-                mArcPaint.strokeCap = Paint.Cap.ROUND
-                mProgressPaint.strokeCap = Paint.Cap.ROUND
+                arcPaint.strokeCap = Paint.Cap.ROUND
+                progressPaint.strokeCap = Paint.Cap.ROUND
             } else {
-                mArcPaint.strokeCap = Paint.Cap.SQUARE
-                mProgressPaint.strokeCap = Paint.Cap.SQUARE
+                arcPaint.strokeCap = Paint.Cap.SQUARE
+                progressPaint.strokeCap = Paint.Cap.SQUARE
             }
             field = value
         }
 
     private var mEnabled = a?.getBoolean(R.styleable.ArcSeekBar_enabled, true) ?: true
 
-    private var mArcPaint: Paint = Paint().apply {
-        color = a?.getColor(R.styleable.ArcSeekBar_arcColor, resources.getColor(android.R.color.darker_gray))
-                ?: resources.getColor(android.R.color.darker_gray)
+    private var arcPaint: Paint = Paint().apply {
+        color = a.useOrDefault(resources.getColor(android.R.color.darker_gray)) { getColor(R.styleable.ArcSeekBar_arcColor, it) }
         isAntiAlias = true
         style = Paint.Style.STROKE
-        strokeWidth = mArcWidth.toFloat()
+        strokeWidth = arcWidth
         if (roundedEdges) strokeCap = Paint.Cap.ROUND
     }
 
-    private var mProgressPaint: Paint = Paint().apply {
-        color = a?.getColor(R.styleable.ArcSeekBar_progressColor, resources.getColor(android.R.color.holo_blue_light))
-                ?: resources.getColor(android.R.color.holo_blue_light)
+    fun setArcGradient(vararg colors: Int) {
+        doWhenDrawerDataAreReady {
+            arcPaint.shader = LinearGradient(0F, 0F, 2 * it.width, 0F, colors, null, Shader.TileMode.CLAMP)
+        }
+        invalidate()
+    }
+
+    private var progressPaint: Paint = Paint().apply {
+        color = a.useOrDefault(resources.getColor(android.R.color.holo_blue_light)) { getColor(R.styleable.ArcSeekBar_progressColor, it) }
         isAntiAlias = true
         style = Paint.Style.STROKE
-        strokeWidth = mProgressWidth.toFloat()
+        strokeWidth = this@ArcSeekBar.progressWidth
         if (roundedEdges) strokeCap = Paint.Cap.ROUND
+    }
+
+    fun setProgressGradient(vararg colors: Int) {
+        doWhenDrawerDataAreReady {
+            progressPaint.shader = LinearGradient(it.dx, 0F, it.width, 0F, colors, null, Shader.TileMode.CLAMP)
+        }
+        invalidate()
     }
 
     init {
         a?.recycle()
     }
 
+    private var waitingForDrawerData: List<(ArcSeekBarData) -> Unit> = emptyList()
+
+    private fun doWhenDrawerDataAreReady(f: (ArcSeekBarData) -> Unit) {
+        if (drawData != null) f(drawData!!) else waitingForDrawerData += f
+    }
+
     private var drawData: ArcSeekBarData? = null
+        set(value) {
+            field = value!!
+            val temp = waitingForDrawerData.toList()
+            temp.forEach { it(value) }
+            waitingForDrawerData -= temp
+        }
 
     override fun onDraw(canvas: Canvas) {
         drawData?.run {
-            canvas.drawArc(arcRect, startAngle, sweepAngle, false, mArcPaint)
-            canvas.drawArc(arcRect, startAngle, progressSweepAngle, false, mProgressPaint)
+            canvas.drawArc(arcRect, startAngle, sweepAngle, false, arcPaint)
+            canvas.drawArc(arcRect, startAngle, progressSweepAngle, false, progressPaint)
             if (mEnabled) {
-                val thumbHalfheight = mThumb.intrinsicHeight / 2
-                val thumbHalfWidth = mThumb.intrinsicWidth / 2
-                mThumb.setBounds(thumbX - thumbHalfWidth, thumbY - thumbHalfheight, thumbX + thumbHalfWidth, thumbY + thumbHalfheight)
-                mThumb.draw(canvas)
+                val thumbHalfheight = thumb.intrinsicHeight / 2
+                val thumbHalfWidth = thumb.intrinsicWidth / 2
+                thumb.setBounds(thumbX - thumbHalfWidth, thumbY - thumbHalfheight, thumbX + thumbHalfWidth, thumbY + thumbHalfheight)
+                thumb.draw(canvas)
             }
         }
     }
@@ -94,8 +141,8 @@ class ArcSeekBar @JvmOverloads constructor(
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         val height = View.getDefaultSize(suggestedMinimumHeight, heightMeasureSpec)
         val width = View.getDefaultSize(suggestedMinimumWidth, widthMeasureSpec)
-        val dx = maxOf(mThumb.intrinsicWidth / 2, progressWidth).toFloat() + 2
-        val dy = maxOf(mThumb.intrinsicHeight / 2, progressWidth).toFloat() + 2
+        val dx = maxOf(thumb.intrinsicWidth.toFloat() / 2, this.progressWidth) + 2
+        val dy = maxOf(thumb.intrinsicHeight.toFloat() / 2, this.progressWidth) + 2
         drawData = ArcSeekBarData(dx + paddingLeft, dy + paddingTop, width.toFloat() - 2 * dx - paddingLeft - paddingRight, height.toFloat() - 2 * dy - paddingTop - paddingBottom, progress, maxProgress)
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
     }
@@ -120,8 +167,8 @@ class ArcSeekBar @JvmOverloads constructor(
 
     override fun drawableStateChanged() {
         super.drawableStateChanged()
-        if (mThumb.isStateful) {
-            mThumb.state = drawableState
+        if (thumb.isStateful) {
+            thumb.state = drawableState
         }
         invalidate()
     }
@@ -130,9 +177,9 @@ class ArcSeekBar @JvmOverloads constructor(
         val state = drawData ?: return
         val x = event.x
         val y = event.y
-        if(y > state.height + state.dy * 2) return
+        if (y > state.height + state.dy * 2) return
         val distToCircleCenter = sqrt(pow(state.circleCenterX - x.toDouble(), 2.0) + pow(state.circleCenterY - y.toDouble(), 2.0))
-        if (abs(distToCircleCenter - state.r) > mThumb.intrinsicHeight) return
+        if (abs(distToCircleCenter - state.r) > thumb.intrinsicHeight) return
         isPressed = true
         val innerWidthHalf = state.width / 2
         val xFromCenter = bound(-innerWidthHalf, x - state.circleCenterX, innerWidthHalf).toDouble()
@@ -140,34 +187,6 @@ class ArcSeekBar @JvmOverloads constructor(
         val angleToMax = 1.0 - touchAngle / (2 * state.alphaRad)
         progress = (maxProgress * angleToMax).toInt()
     }
-
-    var progressWidth: Int
-        get() = mProgressWidth
-        set(mProgressWidth) {
-            this.mProgressWidth = mProgressWidth
-            mProgressPaint.strokeWidth = mProgressWidth.toFloat()
-        }
-
-    var arcWidth: Int
-        get() = mArcWidth
-        set(mArcWidth) {
-            this.mArcWidth = mArcWidth
-            mArcPaint.strokeWidth = mArcWidth.toFloat()
-        }
-
-    var progressColor: Int
-        get() = mProgressPaint.color
-        set(color) {
-            mProgressPaint.color = color
-            invalidate()
-        }
-
-    var arcColor: Int
-        get() = mArcPaint.color
-        set(color) {
-            mArcPaint.color = color
-            invalidate()
-        }
 
     override fun isEnabled(): Boolean = mEnabled
 
@@ -180,4 +199,6 @@ class ArcSeekBar @JvmOverloads constructor(
         value.toDouble() < min.toDouble() -> min
         else -> value
     }
+
+    fun <T, R> T?.useOrDefault(default: R, usage: T.(R) -> R) = if (this == null) default else usage(default)
 }

@@ -2,7 +2,6 @@
 <resources>
     <declare-styleable name="ArcSeekBar">
         <attr name="thumb" format="reference" />
-        <attr name="thumbOffset" format="dimension" />
         <attr name="maxProgress" format="integer" />
         <attr name="progressWidth" format="dimension" />
         <attr name="arcWidth" format="dimension" />
