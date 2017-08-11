@@ -17,9 +17,7 @@ Here are some usage examples:
 ```xml
 <com.marcinmoskala.arcseekbar.ArcSeekBar
     android:layout_width="300dp"
-    android:layout_height="150dp"
-    android:layout_margin="20dp"
-    android:padding="20dp" />
+    android:layout_height="150dp" />
 ```
 
 ![Img1](art/2.png)
@@ -30,9 +28,7 @@ Here are some usage examples:
     app:progressColor="@color/colorAccent"
     app:progressBackgroundColor="@color/colorPrimary"
     android:layout_width="200dp"
-    android:layout_height="100dp"
-    android:layout_margin="20dp"
-    android:padding="20dp" />
+    android:layout_height="100dp" />
 ```
 
 [Here](https://github.com/MarcinMoskala/ArcSeekBar/blob/master/app/src/main/res/drawable/thumb2.xml) is progress drawable `thumb2` definition.
@@ -44,8 +40,6 @@ Here are some usage examples:
     android:id="@+id/seekArc"
     android:layout_width="match_parent"
     android:layout_height="100dp"
-    android:layout_margin="20dp"
-    android:padding="20dp"
     app:progressBackgroundColor="@color/sliderBack"
     app:progressBackgroundWidth="20dp"
     app:progress="100"
