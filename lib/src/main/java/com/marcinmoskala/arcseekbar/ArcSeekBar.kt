@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
-import android.graphics.RectF
 import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.view.MotionEvent
@@ -17,9 +16,9 @@ class ArcSeekBar @JvmOverloads constructor(
         defStyle: Int = -1
 ) : View(context, attrs, defStyle) {
 
-    var onProgressChangedListener: ((seekArc: ArcSeekBar, progress: Int) -> Unit)? = null
-    var onStartTrackingTouch: ((seekArc: ArcSeekBar) -> Unit)? = null
-    var onStopTrackingTouch: ((seekArc: ArcSeekBar) -> Unit)? = null
+    var onProgressChangedListener: ((progress: Int) -> Unit)? = null
+    var onStartTrackingTouch: ((progress: Int) -> Unit)? = null
+    var onStopTrackingTouch: ((progress: Int) -> Unit)? = null
 
     private val a = attrs?.let { context.obtainStyledAttributes(attrs, R.styleable.ArcSeekBar, defStyle, 0) }
 
@@ -30,7 +29,7 @@ class ArcSeekBar @JvmOverloads constructor(
     var progress: Int = a?.getInteger(R.styleable.ArcSeekBar_progress, 0) ?: 0
         set(progress) {
             field = bound(0, progress, maxProgress)
-            onProgressChangedListener?.invoke(this, field)
+            onProgressChangedListener?.invoke(field)
             drawData = drawData?.copy(progress = field)
             invalidate()
         }
@@ -106,12 +105,12 @@ class ArcSeekBar @JvmOverloads constructor(
         if (mEnabled) {
             when (event.action) {
                 MotionEvent.ACTION_DOWN -> {
-                    onStartTrackingTouch?.invoke(this)
+                    onStartTrackingTouch?.invoke(progress)
                     updateOnTouch(event)
                 }
                 MotionEvent.ACTION_MOVE -> updateOnTouch(event)
                 MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
-                    onStopTrackingTouch?.invoke(this)
+                    onStopTrackingTouch?.invoke(progress)
                     isPressed = false
                 }
             }
