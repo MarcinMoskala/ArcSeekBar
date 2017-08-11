@@ -4,7 +4,7 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
     <color name="sliderBack">#4227395a</color>
-    <array name="sliderArc">
+    <array name="progressGradientColors">
         <item>#b5fff6</item>
         <item>#00ffdf</item>
         <item>#00bfa4</item>

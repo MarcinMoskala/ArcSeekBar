@@ -20,6 +20,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        seekArc.setProgressGradient(getResources().getIntArray(R.array.sliderArc));
+        int[] intArray = getResources().getIntArray(R.array.progressGradientColors);
+        seekArc.setProgressGradient(intArray);
     }
 }

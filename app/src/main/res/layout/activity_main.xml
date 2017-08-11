@@ -1,29 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center"
+    android:background="@android:color/white"
     android:orientation="vertical">
 
-    <com.marcinmoskala.arcseekbar.ArcSeekBar xmlns:app="http://schemas.android.com/apk/res-auto"
+    <com.marcinmoskala.arcseekbar.ArcSeekBar
         android:id="@+id/seekArc"
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:layout_margin="20dp"
         android:padding="20dp"
-        app:arcColor="@color/sliderBack"
-        app:arcWidth="20dp"
+        app:progressBackgroundColor="@color/sliderBack"
+        app:progressBackgroundWidth="20dp"
         app:progress="100"
         app:progressWidth="20dp"
-        app:roundEdges="true"
-        app:thumb="@drawable/thumb" />
+        app:roundEdges="true" />
 
-    <!--<com.marcinmoskala.arcseekbar.ArcSeekBar-->
-    <!--android:padding="20dp"-->
-    <!--android:layout_margin="20dp"-->
-    <!--android:layout_width="200dp"-->
-    <!--android:layout_height="100dp" />-->
+    <com.marcinmoskala.arcseekbar.ArcSeekBar
+        app:progressDrawable="@drawable/thumb2"
+        app:progressColor="@color/colorAccent"
+        app:progressBackgroundColor="@color/colorPrimary"
+        android:layout_width="200dp"
+        android:layout_height="100dp"
+        android:layout_margin="20dp"
+        android:padding="20dp" />
 
     <com.marcinmoskala.arcseekbar.ArcSeekBar
         android:layout_width="300dp"
