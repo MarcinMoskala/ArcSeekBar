@@ -95,8 +95,9 @@ class ArcSeekBar @JvmOverloads constructor(
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         val height = View.getDefaultSize(suggestedMinimumHeight, heightMeasureSpec)
         val width = View.getDefaultSize(suggestedMinimumWidth, widthMeasureSpec)
-        val d = progressWidth + 2F
-        drawData = ArcSeekBarData(d + paddingLeft, d + paddingTop, width.toFloat() - 2 * d - paddingLeft - paddingRight, height.toFloat() - 2 * d - paddingTop - paddingBottom, progress, maxProgress)
+        val dx = maxOf(mThumb.intrinsicWidth / 2, progressWidth).toFloat() + 2
+        val dy = maxOf(mThumb.intrinsicHeight / 2, progressWidth).toFloat() + 2
+        drawData = ArcSeekBarData(dx + paddingLeft, dy + paddingTop, width.toFloat() - 2 * dx - paddingLeft - paddingRight, height.toFloat() - 2 * dy - paddingTop - paddingBottom, progress, maxProgress)
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
     }
 
