@@ -21,7 +21,7 @@
         app:roundEdges="true" />
 
     <com.marcinmoskala.arcseekbar.ArcSeekBar
-        app:progressDrawable="@drawable/thumb2"
+        app:thumb="@drawable/thumb2"
         app:progressColor="@color/colorAccent"
         app:progressBackgroundColor="@color/colorPrimary"
         android:layout_width="200dp"

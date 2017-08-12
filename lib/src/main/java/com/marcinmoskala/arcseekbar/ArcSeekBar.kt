@@ -43,7 +43,7 @@ class ArcSeekBar @JvmOverloads constructor(
     var progressBackgroundWidth: Float = a.useOrDefault(2F) { getDimension(R.styleable.ArcSeekBar_progressBackgroundWidth, it) }
         set(mArcWidth) {
             field = mArcWidth
-            arcPaint.strokeWidth = mArcWidth
+            progressBackgroundPaint.strokeWidth = mArcWidth
         }
 
     var progressColor: Int
@@ -53,88 +53,70 @@ class ArcSeekBar @JvmOverloads constructor(
             invalidate()
         }
 
-    var arcColor: Int
-        get() = arcPaint.color
+    var progressBackgroundColor: Int
+        get() = progressBackgroundPaint.color
         set(color) {
-            arcPaint.color = color
+            progressBackgroundPaint.color = color
             invalidate()
         }
 
-    private val thumb: Drawable = a?.getDrawable(R.styleable.ArcSeekBar_progressDrawable) ?: resources.getDrawable(R.drawable.thumb)
+    private val thumb: Drawable = a?.getDrawable(R.styleable.ArcSeekBar_thumb) ?: resources.getDrawable(R.drawable.thumb)
 
     private var roundedEdges = a.useOrDefault(true) { getBoolean(R.styleable.ArcSeekBar_roundEdges, it) }
         set(value) {
             if (value) {
-                arcPaint.strokeCap = Paint.Cap.ROUND
+                progressBackgroundPaint.strokeCap = Paint.Cap.ROUND
                 progressPaint.strokeCap = Paint.Cap.ROUND
             } else {
-                arcPaint.strokeCap = Paint.Cap.SQUARE
+                progressBackgroundPaint.strokeCap = Paint.Cap.SQUARE
                 progressPaint.strokeCap = Paint.Cap.SQUARE
             }
             field = value
         }
 
+    private var progressBackgroundPaint: Paint = makeProgressPaint(
+            color = a.useOrDefault(resources.getColor(android.R.color.darker_gray)) { getColor(R.styleable.ArcSeekBar_progressBackgroundColor, it) },
+            width = progressBackgroundWidth
+    )
+
+    private var progressPaint: Paint = makeProgressPaint(
+            color = a.useOrDefault(resources.getColor(android.R.color.holo_blue_light)) { getColor(R.styleable.ArcSeekBar_progressColor, it) },
+            width = progressWidth
+    )
+
     private var mEnabled = a?.getBoolean(R.styleable.ArcSeekBar_enabled, true) ?: true
-
-    private var arcPaint: Paint = Paint().apply {
-        color = a.useOrDefault(resources.getColor(android.R.color.darker_gray)) { getColor(R.styleable.ArcSeekBar_progressBackgroundColor, it) }
-        isAntiAlias = true
-        style = Paint.Style.STROKE
-        strokeWidth = progressBackgroundWidth
-        if (roundedEdges) strokeCap = Paint.Cap.ROUND
-    }
-
-    fun setArcGradient(vararg colors: Int) {
-        doWhenDrawerDataAreReady {
-            arcPaint.shader = LinearGradient(0F, 0F, 2 * it.width, 0F, colors, null, Shader.TileMode.CLAMP)
-        }
-        invalidate()
-    }
-
-    private var progressPaint: Paint = Paint().apply {
-        color = a.useOrDefault(resources.getColor(android.R.color.holo_blue_light)) { getColor(R.styleable.ArcSeekBar_progressColor, it) }
-        isAntiAlias = true
-        style = Paint.Style.STROKE
-        strokeWidth = this@ArcSeekBar.progressWidth
-        if (roundedEdges) strokeCap = Paint.Cap.ROUND
-    }
-
-    fun setProgressGradient(vararg colors: Int) {
-        doWhenDrawerDataAreReady {
-            progressPaint.shader = LinearGradient(it.dx, 0F, it.width, 0F, colors, null, Shader.TileMode.CLAMP)
-        }
-        invalidate()
-    }
 
     init {
         a?.recycle()
     }
 
-    private var waitingForDrawerData: List<(ArcSeekBarData) -> Unit> = emptyList()
+    private var drawerDataObservers: List<(ArcSeekBarData) -> Unit> = emptyList()
 
     private fun doWhenDrawerDataAreReady(f: (ArcSeekBarData) -> Unit) {
-        if (drawData != null) f(drawData!!) else waitingForDrawerData += f
+        if (drawData != null) f(drawData!!) else drawerDataObservers += f
     }
 
     private var drawData: ArcSeekBarData? = null
         set(value) {
             field = value!!
-            val temp = waitingForDrawerData.toList()
+            val temp = drawerDataObservers.toList()
             temp.forEach { it(value) }
-            waitingForDrawerData -= temp
+            drawerDataObservers -= temp
         }
 
     override fun onDraw(canvas: Canvas) {
         drawData?.run {
-            canvas.drawArc(arcRect, startAngle, sweepAngle, false, arcPaint)
+            canvas.drawArc(arcRect, startAngle, sweepAngle, false, progressBackgroundPaint)
             canvas.drawArc(arcRect, startAngle, progressSweepAngle, false, progressPaint)
-            if (mEnabled) {
-                val thumbHalfheight = thumb.intrinsicHeight / 2
-                val thumbHalfWidth = thumb.intrinsicWidth / 2
-                thumb.setBounds(thumbX - thumbHalfWidth, thumbY - thumbHalfheight, thumbX + thumbHalfWidth, thumbY + thumbHalfheight)
-                thumb.draw(canvas)
-            }
+            if (mEnabled) drawThumb(canvas)
         }
+    }
+
+    private fun ArcSeekBarData.drawThumb(canvas: Canvas) {
+        val thumbHalfHeight = thumb.intrinsicHeight / 2
+        val thumbHalfWidth = thumb.intrinsicWidth / 2
+        thumb.setBounds(thumbX - thumbHalfWidth, thumbY - thumbHalfHeight, thumbX + thumbHalfWidth, thumbY + thumbHalfHeight)
+        thumb.draw(canvas)
     }
 
     @SuppressLint("DrawAllocation")
@@ -173,6 +155,29 @@ class ArcSeekBar @JvmOverloads constructor(
             thumb.state = drawableState
         }
         invalidate()
+    }
+
+    fun setProgressBackgroundGradient(vararg colors: Int) {
+        setGradient(progressBackgroundPaint, *colors)
+    }
+
+    fun setProgressGradient(vararg colors: Int) {
+        setGradient(progressPaint, *colors)
+    }
+
+    private fun setGradient(paint: Paint, vararg colors: Int) {
+        doWhenDrawerDataAreReady {
+            paint.shader = LinearGradient(it.dx, 0F, it.width, 0F, colors, null, Shader.TileMode.CLAMP)
+        }
+        invalidate()
+    }
+
+    private fun makeProgressPaint(color: Int, width: Float) = Paint().apply {
+        this.color = color
+        isAntiAlias = true
+        style = Paint.Style.STROKE
+        strokeWidth = width
+        if (roundedEdges) strokeCap = Paint.Cap.ROUND
     }
 
     private fun updateOnTouch(event: MotionEvent) {

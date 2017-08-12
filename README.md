@@ -24,7 +24,7 @@ Here are some usage examples:
 
 ```xml
 <com.marcinmoskala.arcseekbar.ArcSeekBar
-    app:progressDrawable="@drawable/thumb2"
+    app:thumb="@drawable/thumb2"
     app:progressColor="@color/colorAccent"
     app:progressBackgroundColor="@color/colorPrimary"
     android:layout_width="200dp"
@@ -55,6 +55,23 @@ seekArc.setProgressGradient(intArray);
 ```
 
 [Here](https://github.com/MarcinMoskala/ArcSeekBar/blob/master/app/src/main/res/values/colors.xml) you can find array definition.
+
+## Customization
+
+ArcSeekBar properties are:
+* `thumb` - reference to thumb drawable.
+* `progress` - initial value of progress (0 by default).
+* `maxProgress` max vale of progress (100 by default).
+* `progressColor` color of visible progress bar.
+* `progressWidth` width of visible progress bar.
+* `progressBackgroundColor` color of bar behind progress.
+* `progressBackgroundWidth` width of bar behind progress.
+* `roundEdges` if edges should be rounded or not (`true` by default).
+* `enabled` is progress enabled or not (`true` by default). For disabled there is no thumb displayed.
+
+Each property can be changes pragmatically, and additionally gradient progress or background can be set using:
+* `setProgressGradient`
+* `setProgressBackgroundGradient`
 
 ## Installation
 
