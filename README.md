@@ -51,7 +51,7 @@ To make gradient, you need to define it from code:
 
 ```java
 int[] intArray = getResources().getIntArray(R.array.progressGradientColors);
-seekArc.setProgressGradient(intArray);
+arcSeekBar.setProgressGradient(intArray);
 ```
 
 [Here](https://github.com/MarcinMoskala/ArcSeekBar/blob/master/app/src/main/res/values/colors.xml) you can find array definition.
@@ -70,8 +70,8 @@ ArcSeekBar properties are:
 * `enabled` is progress enabled or not (`true` by default). For disabled there is no thumb displayed.
 
 Each property can be changes pragmatically, and additionally gradient progress or background can be set using:
-* `setProgressGradient`
-* `setProgressBackgroundGradient`
+* `setProgressGradient` e.g. `arcSeekBar.setProgressGradient(Color.GREEN, Color.BLUE, Color.YELLOW);`
+* `setProgressBackgroundGradient` e.g. `arcSeekBar.setProgressBackgroundGradient(Color.GREEN, Color.BLUE, Color.YELLOW);`
 
 ## Installation
 
