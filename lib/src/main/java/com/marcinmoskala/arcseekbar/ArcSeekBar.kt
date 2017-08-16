@@ -29,8 +29,8 @@ class ArcSeekBar @JvmOverloads constructor(
     var progress: Int = a.useOrDefault(0) { getInteger(R.styleable.ArcSeekBar_progress, it) }
         set(progress) {
             field = bound(0, progress, maxProgress)
-            onProgressChangedListener?.invoke(field)
-            doWhenDrawerDataAreReady { drawData = it.copy(progress = field) }
+            onProgressChangedListener?.invoke(progress)
+            drawData?.let { drawData = it.copy(progress = progress) }
             invalidate()
         }
 
