@@ -1,10 +1,12 @@
-package com.marcinmoskala.arcseekbar;
+package com.marcinmoskala.arcseekbar.sample;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+
+import com.marcinmoskala.arcseekbar.ArcSeekBar;
+import com.marcinmoskala.arcseekbar.ProgressListener;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -14,12 +16,15 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ArcSeekBar arcSeekBar = findViewById(R.id.seekArc);
 
-        arcSeekBar.setOnProgressChangedListener(new ProgressListener() {
+        arcSeekBar.setMaxProgress(200);
+        ProgressListener progressListener = new ProgressListener() {
             @Override
             public void invoke(int progress) {
                 Log.i("SeekBar", "Value is " + progress);
             }
-        });
+        };
+        progressListener.invoke(0);
+        arcSeekBar.setOnProgressChangedListener(progressListener);
 
         int[] intArray = getResources().getIntArray(R.array.progressGradientColors);
         arcSeekBar.setProgressGradient(intArray);

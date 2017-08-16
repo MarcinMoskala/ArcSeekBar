@@ -107,7 +107,7 @@ class ArcSeekBar @JvmOverloads constructor(
     override fun onDraw(canvas: Canvas) {
         drawData?.run {
             canvas.drawArc(arcRect, startAngle, sweepAngle, false, progressBackgroundPaint)
-            canvas.drawArc(arcRect, startAngle, progressSweepAngle - 1, false, progressPaint)
+            canvas.drawArc(arcRect, startAngle, progressSweepAngle, false, progressPaint)
             if (mEnabled) drawThumb(canvas)
         }
     }
