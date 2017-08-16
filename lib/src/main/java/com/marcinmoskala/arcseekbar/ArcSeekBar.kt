@@ -30,7 +30,7 @@ class ArcSeekBar @JvmOverloads constructor(
         set(progress) {
             field = bound(0, progress, maxProgress)
             onProgressChangedListener?.invoke(field)
-            drawData = drawData?.copy(progress = field)
+            doWhenDrawerDataAreReady { drawData = it.copy(progress = field) }
             invalidate()
         }
 
