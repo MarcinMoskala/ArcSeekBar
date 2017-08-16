@@ -27,7 +27,7 @@ class ArcSeekBar @JvmOverloads constructor(
     var maxProgress = a.useOrDefault(100) { getInteger(R.styleable.ArcSeekBar_maxProgress, it) }
         set(progress) {
             field = bound(1, progress, Int.MAX_VALUE)
-            drawData?.let { drawData = it.copy(progress = progress) }
+            drawData?.let { drawData = it.copy(maxProgress = progress) }
             invalidate()
         }
 
