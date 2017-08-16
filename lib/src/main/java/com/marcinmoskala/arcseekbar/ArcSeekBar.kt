@@ -98,7 +98,7 @@ class ArcSeekBar @JvmOverloads constructor(
 
     private var drawData: ArcSeekBarData? = null
         set(value) {
-            field = value!!
+            field = value ?: return
             val temp = drawerDataObservers.toList()
             temp.forEach { it(value) }
             drawerDataObservers -= temp
@@ -107,7 +107,7 @@ class ArcSeekBar @JvmOverloads constructor(
     override fun onDraw(canvas: Canvas) {
         drawData?.run {
             canvas.drawArc(arcRect, startAngle, sweepAngle, false, progressBackgroundPaint)
-            canvas.drawArc(arcRect, startAngle, progressSweepAngle, false, progressPaint)
+            canvas.drawArc(arcRect, startAngle, progressSweepAngle - 1, false, progressPaint)
             if (mEnabled) drawThumb(canvas)
         }
     }
