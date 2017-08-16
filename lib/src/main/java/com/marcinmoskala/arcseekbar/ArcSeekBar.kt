@@ -192,7 +192,7 @@ class ArcSeekBar @JvmOverloads constructor(
         val xFromCenter = bound(-innerWidthHalf, x - state.circleCenterX, innerWidthHalf).toDouble()
         val touchAngle = acos(xFromCenter / state.r) + state.alphaRad - PI / 2
         val angleToMax = 1.0 - touchAngle / (2 * state.alphaRad)
-        progress = (maxProgress * angleToMax).toInt()
+        progress = bound(0, ((maxProgress + 1) * angleToMax).toInt(), maxProgress)
     }
 
     override fun isEnabled(): Boolean = mEnabled
