@@ -206,11 +206,5 @@ class ArcSeekBar @JvmOverloads constructor(
         this.mEnabled = enabled
     }
 
-    private fun <T : Number> bound(min: T, value: T, max: T) = when {
-        value.toDouble() > max.toDouble() -> max
-        value.toDouble() < min.toDouble() -> min
-        else -> value
-    }
-
     fun <T, R> T?.useOrDefault(default: R, usage: T.(R) -> R) = if (this == null) default else usage(default)
 }
