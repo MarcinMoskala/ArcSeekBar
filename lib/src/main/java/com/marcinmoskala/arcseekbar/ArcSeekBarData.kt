@@ -18,7 +18,7 @@ internal data class ArcSeekBarData(
     val arcRect: RectF = RectF(circleCenterX - r, circleCenterY - r, circleCenterX + r, circleCenterY + r)
     val startAngle: Float = bound(180F, 270 - alphaRad / 2 / pi * 360F, 360F)
     val sweepAngle: Float = bound(0F, (2F * alphaRad) / 2 / pi * 360F, 180F)
-    val progressSweepRad = bound(0F, progress.toFloat() / maxProgress * 2 * alphaRad, 2 * pi)
+    val progressSweepRad = if(maxProgress == 0) 0F else bound(0F, progress.toFloat() / maxProgress * 2 * alphaRad, 2 * pi)
     val progressSweepAngle: Float = progressSweepRad / 2 / pi * 360F
     val thumbX: Int = (r * Math.cos(alphaRad + Math.PI / 2 - progressSweepRad).toFloat() + circleCenterX).toInt()
     val thumbY: Int = (-r * Math.sin(alphaRad + Math.PI / 2 - progressSweepRad).toFloat() + circleCenterY).toInt()
