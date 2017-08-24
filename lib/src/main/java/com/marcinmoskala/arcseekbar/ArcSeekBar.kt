@@ -15,7 +15,7 @@ import java.lang.Math.*
 class ArcSeekBar @JvmOverloads constructor(
         context: Context,
         attrs: AttributeSet? = null,
-        defStyle: Int = -1
+        defStyle: Int = 0
 ) : View(context, attrs, defStyle) {
 
     var onProgressChangedListener: (ProgressListener)? = null
