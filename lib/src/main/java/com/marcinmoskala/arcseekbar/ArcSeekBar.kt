@@ -15,14 +15,15 @@ import java.lang.Math.*
 class ArcSeekBar @JvmOverloads constructor(
         context: Context,
         attrs: AttributeSet? = null,
-        defStyle: Int = 0
+        defStyle: Int = 0,
+        defStyleRes: Int = 0
 ) : View(context, attrs, defStyle) {
 
     var onProgressChangedListener: (ProgressListener)? = null
     var onStartTrackingTouch: (ProgressListener)? = null
     var onStopTrackingTouch: (ProgressListener)? = null
 
-    private val a = attrs?.let { context.obtainStyledAttributes(attrs, R.styleable.ArcSeekBar, defStyle, 0) }
+    private val a = attrs?.let { context.obtainStyledAttributes(attrs, R.styleable.ArcSeekBar, defStyle, defStyleRes) }
 
     var maxProgress = a.useOrDefault(100) { getInteger(R.styleable.ArcSeekBar_maxProgress, it) }
         set(progress) {
