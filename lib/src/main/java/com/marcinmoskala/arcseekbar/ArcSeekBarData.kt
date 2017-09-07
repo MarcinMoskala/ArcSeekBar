@@ -13,9 +13,9 @@ internal data class ArcSeekBarData(
     private val pi = Math.PI.toFloat()
     private val zero = 0.0001F
     val r: Float = height / 2 + width * width / 8 / height
-    val circleCenterX: Float = width / 2 + dy
-    val circleCenterY: Float = r + dx
-    val alphaRad: Float = bound(zero, Math.acos((r - height).toDouble() / r).toFloat(), 2 * pi)
+    private val circleCenterX: Float = width / 2 + dy
+    private val circleCenterY: Float = r + dx
+    private val alphaRad: Float = bound(zero, Math.acos((r - height).toDouble() / r).toFloat(), 2 * pi)
     val arcRect: RectF = RectF(circleCenterX - r, circleCenterY - r, circleCenterX + r, circleCenterY + r)
     val startAngle: Float = bound(180F, 270 - alphaRad / 2 / pi * 360F, 360F)
     val sweepAngle: Float = bound(zero, (2F * alphaRad) / 2 / pi * 360F, 180F)
