@@ -187,18 +187,9 @@ class ArcSeekBar @JvmOverloads constructor(
     }
 
     private fun updateOnTouch(event: MotionEvent) {
-        val state = drawData ?: return
-        val x = event.x
-        val y = event.y
-        if (y > state.height + state.dy * 2) return
-        val distToCircleCenter = sqrt(pow(state.circleCenterX - x.toDouble(), 2.0) + pow(state.circleCenterY - y.toDouble(), 2.0))
-        if (abs(distToCircleCenter - state.r) > thumb.intrinsicHeight) return
+        val progressFromClick = drawData?.progressFromClick(event.x, event.y, thumb.intrinsicHeight) ?: return
         isPressed = true
-        val innerWidthHalf = state.width / 2
-        val xFromCenter = bound(-innerWidthHalf, x - state.circleCenterX, innerWidthHalf).toDouble()
-        val touchAngle = acos(xFromCenter / state.r) + state.alphaRad - PI / 2
-        val angleToMax = 1.0 - touchAngle / (2 * state.alphaRad)
-        progress = bound(0, ((maxProgress + 1) * angleToMax).toInt(), maxProgress)
+        progress = progressFromClick
     }
 
     override fun isEnabled(): Boolean = mEnabled
