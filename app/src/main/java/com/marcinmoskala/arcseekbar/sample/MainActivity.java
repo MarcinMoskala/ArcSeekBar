@@ -17,12 +17,7 @@ public class MainActivity extends AppCompatActivity {
         ArcSeekBar arcSeekBar = findViewById(R.id.seekArc);
 
         arcSeekBar.setMaxProgress(200);
-        ProgressListener progressListener = new ProgressListener() {
-            @Override
-            public void invoke(int progress) {
-                Log.i("SeekBar", "Value is " + progress);
-            }
-        };
+        ProgressListener progressListener = progress -> Log.i("SeekBar", "Value is " + progress);
         progressListener.invoke(0);
         arcSeekBar.setOnProgressChangedListener(progressListener);
 
