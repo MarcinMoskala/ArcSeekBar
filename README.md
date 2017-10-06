@@ -4,7 +4,11 @@ Library used to make good looking curved SeekBars.
 
 [![](https://jitpack.io/v/marcinmoskala/ArcSeekBar.svg)](https://jitpack.io/#marcinmoskala/ArcSeekBar)
 
-News about library can be found on <a href="https://twitter.com/marcinmoskala?ref_src=twsrc%5Etfw" class="twitter-follow-button" data-show-count="false">Follow @marcinmoskala</a><script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+News about library can be found on 
+
+{::nomarkdown}
+<a href="https://twitter.com/marcinmoskala?ref_src=twsrc%5Etfw" class="twitter-follow-button" data-show-count="false">Follow @marcinmoskala</a><script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+{:/}
 
 ## Usage
 
