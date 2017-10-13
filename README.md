@@ -1,10 +1,10 @@
 # ArcSeekBar
 
-Library used to make good looking curved SeekBars.
+Library was created to make good looking curved SeekBars.
 
 [![](https://jitpack.io/v/marcinmoskala/ArcSeekBar.svg)](https://jitpack.io/#marcinmoskala/ArcSeekBar)
 
-To stay current with news about library [![Twitter URL](https://img.shields.io/twitter/url/https/twitter.com/fold_left.svg?style=social&label=Follow%20%40marcinmoskala)](https://twitter.com/marcinmoskala?ref_src=twsrc%5Etfw)
+To stay up-to-date with news about library [![Twitter URL](https://img.shields.io/twitter/url/https/twitter.com/fold_left.svg?style=social&label=Follow%20%40marcinmoskala)](https://twitter.com/marcinmoskala?ref_src=twsrc%5Etfw)
 
 ## Usage
 
@@ -49,7 +49,7 @@ Here are some usage examples:
     app:roundEdges="true" />
 ```
 
-To make gradient, you need to define it from code:
+To make gradient, you need to define it in code:
 
 ```java
 int[] intArray = getResources().getIntArray(R.array.progressGradientColors);
@@ -71,13 +71,13 @@ ArcSeekBar properties are:
 * `roundEdges` if edges should be rounded or not (`true` by default).
 * `enabled` is progress enabled or not (`true` by default). For disabled there is no thumb displayed.
 
-Each property can be changes pragmatically, and additionally gradient progress or background can be set using:
+Each property can be changes pragmatically, and additionally gradient progress or background can be set by:
 * `setProgressGradient` e.g. `arcSeekBar.setProgressGradient(Color.GREEN, Color.BLUE, Color.YELLOW);`
 * `setProgressBackgroundGradient` e.g. `arcSeekBar.setProgressBackgroundGradient(Color.GREEN, Color.BLUE, Color.YELLOW);`
 
 ## Installation
 
-Just add in your module `build.gradle` following dependency:
+Just add following dependency in your module `build.gradle`:
 
 ```groovy
 dependencies {
@@ -95,11 +95,11 @@ repositories {
 
 ## Other libraries
 
-If you like it, remamber to leave the star and check out my other libraries:
+If you like it, remember to leave the star and check out my other libraries:
  * [VideoPlayView](https://github.com/MarcinMoskala/VideoPlayView) - Custom Android view with video player, loader and placeholder image
  * [ActivityStarter](https://github.com/MarcinMoskala/ActivityStarter/blob/master/README.md) - Simple Android Library, that provides easy way to start and save state of Activities, Fragments, Services and Receivers with arguments.
  * [PreferenceHolder](https://github.com/MarcinMoskala/PreferenceHolder) - Library for simple SharedPreference management in Kotlin
- * [KotlinAndroidViewBindings](https://github.com/MarcinMoskala/KotlinAndroidViewBindings) - Bindings from simple Kotlin types (Boolean, String) to layout traits (visibility, text).
+ * [KotlinAndroidViewBindings](https://github.com/MarcinMoskala/KotlinAndroidViewBindings) - Bindings for properties with simple Kotlin types (Boolean, String) to layout traits (visibility, text).
 
 License
 -------
