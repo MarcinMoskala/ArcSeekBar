@@ -93,6 +93,13 @@ repositories {
 }
 ```
 
+## Other libraries
+
+ * [VideoPlayView](https://github.com/MarcinMoskala/VideoPlayView) - Custom Android view with video player, loader and placeholder image
+If you like it, remamber to leave the star and check out my other libraries:
+ * [ActivityStarter](https://github.com/MarcinMoskala/ActivityStarter/blob/master/README.md) - Simple Android Library, that provides easy way to start and save state of Activities, Fragments, Services and Receivers with arguments.
+ * [PreferenceHolder](https://github.com/MarcinMoskala/PreferenceHolder) - Library for simple SharedPreference management in Kotlin
+ * [KotlinAndroidViewBindings](https://github.com/MarcinMoskala/KotlinAndroidViewBindings) - Bindings from simple Kotlin types (Boolean, String) to layout traits (visibility, text).
 
 License
 -------
