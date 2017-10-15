@@ -3,6 +3,8 @@
 Library was created to make good looking curved SeekBars.
 
 [![](https://jitpack.io/v/marcinmoskala/ArcSeekBar.svg)](https://jitpack.io/#marcinmoskala/ArcSeekBar)
+[![Analytics](https://ga-beacon.appspot.com/UA-92159206-9/main-page?pixel)](https://github.com/MarcinMoskala/ArcSeekBar)
+[![Analytics](https://ga-beacon.appspot.com/UA-92159206-7/main-page?pixel)](https://github.com/MarcinMoskala/ArcSeekBar)
 
 To stay up-to-date with news about library [![Twitter URL](https://img.shields.io/twitter/url/https/twitter.com/fold_left.svg?style=social&label=Follow%20%40marcinmoskala)](https://twitter.com/marcinmoskala?ref_src=twsrc%5Etfw)
 
