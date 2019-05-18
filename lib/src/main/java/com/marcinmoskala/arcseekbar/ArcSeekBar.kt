@@ -26,17 +26,17 @@ class ArcSeekBar @JvmOverloads constructor(
     private val a = attrs?.let { context.obtainStyledAttributes(attrs, R.styleable.ArcSeekBar, defStyle, defStyleRes) }
 
     var maxProgress = a.useOrDefault(100) { getInteger(R.styleable.ArcSeekBar_maxProgress, it) }
-        set(progress) {
-            field = bound(0, progress, Int.MAX_VALUE)
-            drawData?.let { drawData = it.copy(maxProgress = progress) }
+        set(progressValue) {
+            field = bound(0, progressValue, Int.MAX_VALUE)
+            drawData?.let { drawData = it.copy(maxProgress = progressValue) }
             invalidate()
         }
 
-    var progress: Int = a.useOrDefault(0) { getInteger(R.styleable.ArcSeekBar_progress, it) }
-        set(progress) {
-            field = bound(0, progress, maxProgress)
-            onProgressChangedListener?.invoke(progress)
-            drawData?.let { drawData = it.copy(progress = progress) }
+    var progressValue: Int = a.useOrDefault(0) { getInteger(R.styleable.ArcSeekBar_progressValue, it) }
+        set(progressValue) {
+            field = bound(0, progressValue, maxProgress)
+            onProgressChangedListener?.invoke(progressValue)
+            drawData?.let { drawData = it.copy(progressValue = progressValue) }
             invalidate()
         }
 
