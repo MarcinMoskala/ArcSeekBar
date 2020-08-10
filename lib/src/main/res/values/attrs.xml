@@ -2,7 +2,7 @@
 <resources>
     <declare-styleable name="ArcSeekBar">
         <attr name="thumb" format="reference" />
-        <attr name="progress" format="integer" />
+        <attr name="progressValue" format="integer" />
         <attr name="maxProgress" format="integer" />
         <attr name="progressColor" format="color" />
         <attr name="progressWidth" format="dimension" />
